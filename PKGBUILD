@@ -1,5 +1,5 @@
 pkgname='blend-inst-t2'
-pkgver=1.0r1
+pkgver=1.0r2
 pkgrel=1
 pkgdesc='blendOS Installer Framework for Macs with T2 chip'
 arch=(any)

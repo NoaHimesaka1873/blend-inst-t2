@@ -353,6 +353,9 @@ def inst_users(config):
         ['bash', '-c', 'echo "Current=breeze" >> /etc/sddm.conf.d/default.conf'])
     exec_chroot(['rm', '-f', '/etc/gdm/custom.conf'])
 
+    # Delete udev Thunderbolt rule
+    exec_chroot(['rm', '-f', '/etc/udev/rules.d/99-thunderbolt.rules'])
+
 
 ########################################################################################
 
