@@ -210,11 +210,14 @@ def inst_setup_base(config):
     # Enable system services
     enable_service('bluetooth')
     enable_service('cups')
+    # Enable T2 services
+    enable_service('touchbard')
+    enable_service('t2fand')
     # Enable blend-files
     enable_service('blend-system')
     enable_user_service('blend-files')
     # Add blend hook
-    exec_chroot(['bash', '-c', 'echo \'MODULES=""\' > /etc/mkinitcpio.conf'])
+    exec_chroot(['bash', '-c', 'echo \'MODULES="apple-bce"\' > /etc/mkinitcpio.conf'])
     exec_chroot(['bash', '-c', 'echo \'BINARIES=""\' >> /etc/mkinitcpio.conf'])
     exec_chroot(['bash', '-c', 'echo \'FILES=""\' >> /etc/mkinitcpio.conf'])
     exec_chroot(['bash', '-c', 'echo \'HOOKS="base udev plymouth autodetect modconf block keyboard keymap consolefont filesystems fsck blend"\' >> /etc/mkinitcpio.conf'])
@@ -228,12 +231,14 @@ def inst_setup_base(config):
     exec_chroot(['pacman-key', '--populate', 'archlinux'])
     exec_chroot(['pacman-key', '--populate', 'blend'])
     exec_chroot(['pacman-key', '--populate', 'chaotic'])
+    exec_chroot(['pacman-key', '--recv-keys', 'F1E594DC4F486C4D04ECB43FDEB7F121BAAA6F4E'])
+    exec_chroot(['pacman-ket', '--lsign-key', 'F1E594DC4F486C4D04ECB43FDEB7F121BAAA6F4E'])
     if config['flatpak']:
         install_pkgs('flatpak')
     # Install kernel
     install_pkgs(config['kernel'])
     # Install binder
-    install_pkgs('linux-headers')
+    install_pkgs('linux-t2-headers')
     install_pkgs('binder_linux-dkms')
     # Remove jade-gui and blend-inst
     exec_chroot(['pacman', '-Rn', '--noconfirm', 'jade-gui', 'blend-inst-git'])
@@ -247,13 +252,13 @@ def inst_bootloader(config):
     # Install bootloader
     if 'NVIDIA' in subprocess.check_output(['lspci']).decode('utf-8'):
         exec_chroot(
-            ['bash', '-c', 'echo -e \'\\nGRUB_CMDLINE_LINUX_DEFAULT="${GRUB_CMDLINE_LINUX_DEFAULT} nvidia_drm.modeset=1 splash"\' >> /etc/default/grub'])
+            ['bash', '-c', 'echo -e \'\\nGRUB_CMDLINE_LINUX_DEFAULT="${GRUB_CMDLINE_LINUX_DEFAULT} intel_iommu=on iommu=pt pcie_ports=compat nvidia_drm.modeset=1 splash"\' >> /etc/default/grub'])
         mkdir('/mnt/etc/udev/rules.d')
         exec_chroot(['ln', '-s', '/dev/null',
                     '/etc/udev/rules.d/61-gdm.rules'])
     else:
         exec_chroot(
-            ['bash', '-c', 'echo -e \'\\nGRUB_CMDLINE_LINUX_DEFAULT="${GRUB_CMDLINE_LINUX_DEFAULT} splash"\' >> /etc/default/grub'])
+            ['bash', '-c', 'echo -e \'\\nGRUB_CMDLINE_LINUX_DEFAULT="${GRUB_CMDLINE_LINUX_DEFAULT} intel_iommu=on iommu=pt pcie_ports=compat splash"\' >> /etc/default/grub'])
     if config['bootloader']['type'] == 'grub-efi':
         install_pkgs('efibootmgr')
         exec_chroot(['grub-install', '--target=x86_64-efi', f'--efi-directory={config["bootloader"]["location"]}',
