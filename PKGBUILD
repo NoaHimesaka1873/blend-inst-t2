@@ -1,12 +1,12 @@
-pkgname='blend-inst-git'
-pkgver=r3.76d89ef
+pkgname='blend-inst-t2'
+pkgver=1.0r1
 pkgrel=1
-pkgdesc='blendOS Installer Framework'
+pkgdesc='blendOS Installer Framework for Macs with T2 chip'
 arch=(any)
 depends=('squashfs-tools' 'arch-install-scripts' 'util-linux' 'parted')
 provides=('blend-inst')
 conflicts=('blend-inst')
-source=('git-inst::git+https://github.com/blend-os/blend-inst.git')
+source=('git-inst::git+https://github.com/NoaHimesaka1873/blend-inst-t2.git')
 sha256sums=('SKIP')
 
 pkgver() {
