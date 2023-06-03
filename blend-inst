@@ -238,7 +238,7 @@ def inst_setup_base(config):
     # Install kernel
     install_pkgs(config['kernel'])
     # Install binder
-    install_pkgs('linux-t2-headers')
+    install_pkgs('linux-xanmod-t2-headers')
     install_pkgs('binder_linux-dkms')
     # Remove jade-gui and blend-inst
     exec_chroot(['pacman', '-Rn', '--noconfirm', 'jade-gui-t2', 'blend-inst-t2'])
