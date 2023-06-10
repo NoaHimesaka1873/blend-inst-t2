@@ -251,7 +251,7 @@ def inst_setup_base(config):
     # Install linux-zen
     exec_chroot(['pacman', '-Sy', '--noconfirm', 'linux-xanmod-t2', 'xorriso'])
     # Remove jade-gui and blend-inst
-    exec_chroot(['pacman', '-Rn', '--noconfirm', 'jade-gui-t2', 'blend-inst-t2'])
+    exec_chroot(['pacman', '-Rn', '--noconfirm', 'jade-gui', 'blend-inst-t2'])
 
 
 def inst_bootloader(config):
