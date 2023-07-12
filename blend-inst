@@ -196,11 +196,13 @@ def inst_partition(config):
             format_and_mount(config, mountpoint, filesystem, blockdevice)
         if '/mnt/' not in mountpoints:
             print()
-            print("Invalid manual partitioning configuration. There must be a 'System' partition.")
+            print(
+                "Invalid manual partitioning configuration. There must be a 'System' partition.")
             sys.exit(1)
         if '/mnt/boot/' not in mountpoints and '/mnt/boot/efi/' not in mountpoints:
             print()
-            print("Invalid manual partitioning configuration. There must be a 'Boot' partition.")
+            print(
+                "Invalid manual partitioning configuration. There must be a 'Boot' partition.")
             sys.exit(1)
 
 
@@ -265,6 +267,9 @@ def inst_bootloader(config):
     else:
         exec_chroot(
             ['bash', '-c', 'echo -e \'\\nGRUB_CMDLINE_LINUX_DEFAULT="${GRUB_CMDLINE_LINUX_DEFAULT} intel_iommu=on iommu=pt pcie_ports=compat vt.global_cursor_default=0 splash"\' >> /etc/default/grub'])
+    if config['partition']['mode'] == 'Auto':
+        exec_chroot(
+            ['bash', '-c', 'echo -e \'\\nGRUB_TIMEOUT=0\\nGRUB_CMDLINE_LINUX_DEFAULT="${GRUB_CMDLINE_LINUX_DEFAULT} intel_iommu=on iommu=pt pcie_ports=compat"\' >> /etc/default/grub'])
     if config['bootloader']['type'] == 'grub-efi':
         exec_chroot(['grub-install', '--target=x86_64-efi', f'--efi-directory={config["bootloader"]["location"]}',
                      '--bootloader-id=blend', '--removable'])
@@ -364,6 +369,9 @@ def inst_users(config):
 
     # Delete udev Thunderbolt rule
     exec_chroot(['rm', '-f', '/etc/udev/rules.d/99-thunderbolt.rules'])
+    # Create ~/.local/share/applications with right perms
+    exec_chroot(['sudo', '-u', user['name'], 'mkdir', '-p',
+                f'/home/{user["name"]}/.local/share/applications'])
 
 
 ########################################################################################
