@@ -1,11 +1,11 @@
-pkgname='blend-inst-git'
+pkgname='blend-inst-t2'
 pkgver=r3.76d89ef
 pkgrel=1
 pkgdesc='blendOS Installer Framework'
 arch=(any)
 depends=('squashfs-tools' 'arch-install-scripts' 'util-linux' 'parted')
-provides=('blend-inst')
-conflicts=('blend-inst')
+provides=('blend-inst' 'blend-inst-git')
+conflicts=('blend-inst' 'blend-inst-git')
 source=('git-inst::git+https://github.com/blend-os/blend-inst.git')
 sha256sums=('SKIP')
 
